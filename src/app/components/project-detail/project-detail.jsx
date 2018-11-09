@@ -509,6 +509,17 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
                 return
             }
 
+            let queryVariables = null
+            try {
+                const variablesStr = query.get('variables')
+                if (variablesStr != '') {
+                    queryVariables = JSON.parse(variablesStr)
+                }
+            } catch (e) {
+                swal("Error", "The query variables are not valid JSON.", "error")
+                return
+            }
+
             const startTime = moment()
 
             this.props.tabsUpdate({
@@ -535,7 +546,7 @@ export default ({store, actionCreators, selectors, queries, factories, history, 
                 params: {
                     query: query.get('query'),
                     operationName: query.get('operationName'),
-                    variables: query.get('variables')
+                    variables: queryVariables
                 }
             })
 
